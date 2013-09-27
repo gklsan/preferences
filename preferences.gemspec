@@ -1,28 +1,23 @@
-# -*- encoding: utf-8 -*-
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'preferences/version'
 
-Gem::Specification.new do |s|
-  s.name = %q{preferences}
-  s.version = "0.5.0"
+Gem::Specification.new do |spec|
+  spec.name          = "preferences"
+  spec.version       = Preferences::VERSION
+  spec.authors       = ["Aaron Pfeifer", "Jack Dempsey"]
+  spec.email         = ["aaron@pluginaweek.org"]
+  spec.description   = %q{Adds support for easily creating custom preferences for ActiveRecord models}
+  spec.summary       = %q{Adds support for easily creating custom preferences for ActiveRecord models}
+  spec.homepage      = %q{http://www.pluginaweek.org}
+  spec.license       = "MIT"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Aaron Pfeifer", "Jack Dempsey"]
-  s.date = %q{2011-05-19}
-  s.description = %q{Adds support for easily creating custom preferences for ActiveRecord models}
-  s.email = %q{aaron@pluginaweek.org}
-  s.files = ["app/models", "app/models/preference.rb", "lib/generators", "lib/generators/preferences_generator.rb", "lib/generators/templates", "lib/generators/templates/create_preferences.rb", "lib/generators/USAGE", "lib/preferences", "lib/preferences/engine.rb", "lib/preferences/preference_definition.rb", "lib/preferences.rb", "test/app_root", "test/app_root/app", "test/app_root/app/models", "test/app_root/app/models/car.rb", "test/app_root/app/models/employee.rb", "test/app_root/app/models/manager.rb", "test/app_root/app/models/user.rb", "test/app_root/db", "test/app_root/db/migrate", "test/app_root/db/migrate/001_create_users.rb", "test/app_root/db/migrate/002_create_cars.rb", "test/app_root/db/migrate/003_create_employees.rb", "test/app_root/db/migrate/004_migrate_preferences_to_version_1.rb", "test/factory.rb", "test/functional", "test/functional/preferences_test.rb", "test/test_helper.rb", "test/unit", "test/unit/preference_definition_test.rb", "test/unit/preference_test.rb", "CHANGELOG.rdoc", "LICENSE", "Rakefile", "README.rdoc"]
-  s.homepage = %q{http://www.pluginaweek.org}
-  s.require_paths = ["lib"]
-  s.rubyforge_project = %q{pluginaweek}
-  s.rubygems_version = %q{1.5.2}
-  s.summary = %q{Adds support for easily creating custom preferences for ActiveRecord models}
-  s.test_files = ["test/functional/preferences_test.rb", "test/unit/preference_definition_test.rb", "test/unit/preference_test.rb"]
+  spec.files         = `git ls-files`.split($/)
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.require_paths = ["lib"]
 
-  if s.respond_to? :specification_version then
-    s.specification_version = 3
-
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-    else
-    end
-  else
-  end
+  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_development_dependency "rake"
 end
