@@ -159,6 +159,7 @@ module Preferences
         has_many :stored_preferences, :as => :owner, :class_name => 'Preference'
 
         after_save :update_preferences
+        before_destroy :destroy_preferences
 
         # Named scopes
         scope :with_preferences, lambda {|preferences| build_preference_scope(preferences)}

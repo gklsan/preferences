@@ -4,11 +4,11 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'preferences/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "preferences"
+  spec.name          = "ee_preferences"
   spec.version       = Preferences::VERSION
-  spec.authors       = ["Aaron Pfeifer", "Jack Dempsey"]
+  spec.authors       = ["Aaron Pfeifer", "Jack Dempsey", "Brenda Strech"]
   spec.email         = ["aaron@pluginaweek.org"]
-  spec.description   = %q{Adds support for easily creating custom preferences for ActiveRecord models}
+  spec.description   = %q{Adds support for easily creating custom preferences for ActiveRecord models. Fork for Rails 4.}
   spec.summary       = %q{Adds support for easily creating custom preferences for ActiveRecord models}
   spec.homepage      = %q{http://www.pluginaweek.org}
   spec.license       = "MIT"
