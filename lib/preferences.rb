@@ -614,6 +614,10 @@ module Preferences
           stored_preferences.where(attributes)
         end
       end
+      # Destroys preferences before the owning object is destroyed.
+      def destroy_preferences
+        stored_preferences.destroy_all
+      end
   end
 end
 
