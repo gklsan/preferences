@@ -1,4 +1,7 @@
 == master
+== 0.7.0 / 2016-11-21
+* The 0.7.0 branch supports Rails 4.2. ActiveRecord::Column#type_cast has been removed.
+
 == 0.6.3 / 2014-09-08
 
 * Preferences with type of number were being converted incorrectly.

@@ -14,11 +14,11 @@ Bugs
 
 Development
 
-* http://github.com/pluginaweek/preferences
+* http://github.com/Enlighten/preferences
 
 Source
 
-* git://github.com/pluginaweek/preferences.git
+* git://github.com/Enlighten/preferences.git
 
 == Description
 
@@ -50,6 +50,13 @@ a migration for this table like so:
 Then simply migrate your database:
 
   rake db:migrate
+
+Add the correct version of the gem to your Gemfile:
+
+'~> 0.6.3' for Rails 4.1 and lower
+'~> 0.7.0' for Rails 4.2.x
+
+Eventually, we'll need an 0.8.0 branch for Rails 5.
 
 === Defining preferences
 
@@ -211,6 +218,3 @@ To run against a specific version of Rails:
 
   rake test RAILS_FRAMEWORK_ROOT=/path/to/rails
 
-== Dependencies
-
-* Rails 2.3 or later
