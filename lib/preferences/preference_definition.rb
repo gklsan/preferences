@@ -42,6 +42,10 @@ module Preferences
     def type_cast(value)
       @column.type_cast_for_database(value)
     end
+
+    def type_cast_from_database(value)
+      @column.type_cast_from_database(value)
+    end
     
     # Typecasts the value to true/false depending on the type of preference
     def query(value)

@@ -47,7 +47,7 @@ class Preference < ActiveRecord::Base
   # Typecasts the value depending on the preference definition's declared type
   def value
     value = read_attribute(:value)
-    value = definition.type_cast(value) if definition
+    value = definition.type_cast_from_database(value) if definition
     value
   end
   
