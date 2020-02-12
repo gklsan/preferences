@@ -1,3 +1,23 @@
+class ActiveRecord::ConnectionAdapters::Column
+  def type_cast_from_database(value)
+    return nil if value.nil?
+    case type
+    when :string    then value
+    when :text      then value
+    when :integer   then value.to_i rescue value ? 1 : 0
+    when :float     then value.to_f
+    when :decimal   then self.class.value_to_decimal(value)
+    when :datetime  then self.class.string_to_time(value)
+    when :timestamp then self.class.string_to_time(value)
+    when :time      then self.class.string_to_dummy_time(value)
+    when :date      then self.class.string_to_date(value)
+    when :binary    then self.class.binary_to_string(value)
+    when :boolean   then self.class.value_to_boolean(value)
+    else value
+    end
+  end
+end
+
 module Preferences
   # Represents the definition of a preference for a particular model
   class PreferenceDefinition
@@ -11,7 +31,8 @@ module Preferences
       @type = args.first ? args.first.to_sym : :boolean
       
       # Create a column that will be responsible for typecasting
-      cast_type = ActiveRecord::Base.connection.lookup_cast_type(@type)
+      #cast_type = ActiveRecord::Base.connection.lookup_cast_type(@type)
+      cast_type = ActiveRecord::Type::Value.new
       @column = ActiveRecord::ConnectionAdapters::Column.new(name.to_s, options[:default], cast_type)
 
       @group_defaults = (options[:group_defaults] || {}).inject({}) do |defaults, (group, default)|
@@ -40,7 +61,7 @@ module Preferences
     # This uses ActiveRecord's typecast functionality so the same rules for
     # typecasting a model's columns apply here.
     def type_cast(value)
-      @column.type_cast_for_database(value)
+      @column.type_cast_from_database(value)
     end
 
     def type_cast_from_database(value)
