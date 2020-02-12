@@ -1,4 +1,8 @@
 class ActiveRecord::ConnectionAdapters::Column
+  def number?
+    type == :integer || type == :float || type == :decimal
+  end
+
   def type_cast_from_database(value)
     return nil if value.nil?
     case type
