@@ -3,23 +3,23 @@ class ActiveRecord::ConnectionAdapters::Column
     type == :integer || type == :float || type == :decimal
   end
 
-  def type_cast_from_database(value)
-    return nil if value.nil?
+  def self.lookup_cast_type(type)
     case type
-    when :string    then value
-    when :text      then value
-    when :integer   then value.to_i rescue value ? 1 : 0
-    when :float     then value.to_f
-    when :decimal   then self.class.value_to_decimal(value)
-    when :datetime  then self.class.string_to_time(value)
-    when :timestamp then self.class.string_to_time(value)
-    when :time      then self.class.string_to_dummy_time(value)
-    when :date      then self.class.string_to_date(value)
-    when :binary    then self.class.binary_to_string(value)
-    when :boolean   then self.class.value_to_boolean(value)
-    else value
+    when :string    then ActiveRecord::Type::String
+    when :text      then ActiveRecord::Type::Text
+    when :integer   then ActiveRecord::Type::Integer
+    when :float     then ActiveRecord::Type::Float
+    when :decimal   then ActiveRecord::Type::Decimal
+    when :datetime  then ActiveRecord::Type::DateTime
+    when :timestamp then ActiveRecord::Type::TimeValue
+    when :time      then ActiveRecord::Type::Time
+    when :date      then ActiveRecord::Type::Date
+    when :binary    then ActiveRecord::Type::Binary
+    when :boolean   then ActiveRecord::Type::Boolean
+    else ActiveRecord::Type::Value
     end
   end
+
 end
 
 module Preferences
@@ -36,7 +36,7 @@ module Preferences
       
       # Create a column that will be responsible for typecasting
       #cast_type = ActiveRecord::Base.connection.lookup_cast_type(@type)
-      cast_type = ActiveRecord::Type::Value.new
+      cast_type = ActiveRecord::ConnectionAdapters::Column.lookup_cast_type(@type).new
       @column = ActiveRecord::ConnectionAdapters::Column.new(name.to_s, options[:default], cast_type)
 
       @group_defaults = (options[:group_defaults] || {}).inject({}) do |defaults, (group, default)|
@@ -65,11 +65,11 @@ module Preferences
     # This uses ActiveRecord's typecast functionality so the same rules for
     # typecasting a model's columns apply here.
     def type_cast(value)
-      @column.type_cast_from_database(value)
+      @column.sql_type_metadata.cast(value)
     end
 
     def type_cast_from_database(value)
-      @column.type_cast_from_database(value)
+      @column.sql_type_metadata.cast(value)
     end
     
     # Typecasts the value to true/false depending on the type of preference
