@@ -36,8 +36,20 @@ module Preferences
       
       # Create a column that will be responsible for typecasting
       #cast_type = ActiveRecord::Base.connection.lookup_cast_type(@type)
-      cast_type = ActiveRecord::ConnectionAdapters::Column.lookup_cast_type(@type).new
-      @column = ActiveRecord::ConnectionAdapters::Column.new(name.to_s, options[:default], cast_type)
+      @cast_type = ActiveRecord::ConnectionAdapters::Column.lookup_cast_type(@type).new
+      sql_type_metadata = ActiveRecord::ConnectionAdapters::SqlTypeMetadata.new(
+        sql_type: @cast_type.type.to_s,
+        type: @cast_type.type,
+        limit: @cast_type.limit,
+        precision: @cast_type.precision,
+        scale: @cast_type.scale
+      )
+      default = if @type == :boolean
+                  options[:default] ? 1 : 0
+                else
+                  options[:default].is_a?(Symbol) ? options[:default].to_s : options[:default]
+                end
+      @column = ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type_metadata)
 
       @group_defaults = (options[:group_defaults] || {}).inject({}) do |defaults, (group, default)|
         defaults[group.is_a?(Symbol) ? group.to_s : group] = type_cast(default)
@@ -65,11 +77,11 @@ module Preferences
     # This uses ActiveRecord's typecast functionality so the same rules for
     # typecasting a model's columns apply here.
     def type_cast(value)
-      @column.sql_type_metadata.cast(value)
+      @cast_type.cast(value)
     end
 
     def type_cast_from_database(value)
-      @column.sql_type_metadata.cast(value)
+      @cast_type.cast(value)
     end
     
     # Typecasts the value to true/false depending on the type of preference
